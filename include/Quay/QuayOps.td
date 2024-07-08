@@ -30,7 +30,6 @@ def ConstantOp : Quay_Op<"constant", [Pure]> {
     OpBuilder<(ins "double":$value)>
   ];
 
-//  let parser = [{ return ::parseConstantOp(parser, result); }];
   let arguments = (ins F64ElementsAttr:$value);
   let results = (outs F64Tensor);
 }
@@ -44,30 +43,28 @@ def PrintOp : Quay_Op<"print", [Pure]> {
 
   let arguments = (ins AnyTypeOf<[F64Tensor, F64MemRef]>:$input);
 
-  let assemblyFormat = "$input attr-dict `:` type($input)";
+  let assemblyFormat = [{
+    $input attr-dict `:` type($input)
+  }];
 }
 
-//===----------------------------------------------------------------------===//
-// TransposeOp
-//===----------------------------------------------------------------------===//
+def TransposeOp : Quay_Op<"transpose", [Pure]> {
+  let summary = "transpose operation";
 
-// def TransposeOp : Quay_Op<"transpose"> {
-//   let summary = "transpose operation";
+  let arguments = (ins F64Tensor:$input);
+  let results = (outs F64Tensor);
 
-//   let arguments = (ins F64Tensor:$input);
-//   let results = (outs F64Tensor);
+  let assemblyFormat = [{
+     $input `:` type($input) attr-dict `->` type(results)
+  }];
 
-//   let assemblyFormat = [{
-//     `(` $input `:` type($input) `)` attr-dict `to` type(results)
-//   }];
+  // Allow building a TransposeOp with from the input operand.
+  let builders = [
+    OpBuilder<(ins "Value":$input)>
+  ];
 
-//   // Allow building a TransposeOp with from the input operand.
-//   let builders = [
-//     OpBuilder<(ins "Value":$input)>
-//   ];
-
-//   // Invoke a static verify method to verify this transpose operation.
-//   let hasVerifier = 1;
-// }
+  // Invoke a static verify method to verify this transpose operation.
+  let hasVerifier = 1;
+}
 
 #endif // H_QUAYOPS_TD

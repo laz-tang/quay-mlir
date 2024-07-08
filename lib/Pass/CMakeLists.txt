@@ -1,6 +1,6 @@
 ## 不知道对不对
 
-add_mlir_dialect_library(MLIRQuayConversion
+add_mlir_conversion_library(MLIRQuayConversion
         LowerToAffine.cpp
         LowerToLLVM.cpp
 
